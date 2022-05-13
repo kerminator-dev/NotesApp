@@ -4,14 +4,14 @@
 winexe
 C#
 .cs
-C:\Users\525.khokhlovns\source\repos\NotesApp\NotesApp\obj\Debug\net6.0-windows\
+C:\Users\525.khokhlovns\source\repos\NotesAppRepo\NotesApp\src\NotesApp\NotesApp\obj\Debug\net6.0-windows\
 NotesApp
 none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
-C:\Users\525.khokhlovns\source\repos\NotesApp\NotesApp\App.xaml
+C:\Users\525.khokhlovns\source\repos\NotesAppRepo\NotesApp\src\NotesApp\NotesApp\App.xaml
 5-1830990574
-
+1826450115
 261605674535
 213-1737785366
 Views\CardControl.xaml;Views\EditorWindow.xaml;Views\MainWindow.xaml;Views\NotificationControl.xaml;Views\SettingsWindow.xaml;

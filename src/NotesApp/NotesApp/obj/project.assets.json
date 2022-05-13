@@ -1134,11 +1134,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\525.khokhlovns\\source\\repos\\NotesApp\\NotesApp\\NotesApp.csproj",
+      "projectUniqueName": "C:\\Users\\525.khokhlovns\\source\\repos\\NotesAppRepo\\NotesApp\\src\\NotesApp\\NotesApp\\NotesApp.csproj",
       "projectName": "NotesApp",
-      "projectPath": "C:\\Users\\525.khokhlovns\\source\\repos\\NotesApp\\NotesApp\\NotesApp.csproj",
+      "projectPath": "C:\\Users\\525.khokhlovns\\source\\repos\\NotesAppRepo\\NotesApp\\src\\NotesApp\\NotesApp\\NotesApp.csproj",
       "packagesPath": "C:\\Users\\525.khokhlovns\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\525.khokhlovns\\source\\repos\\NotesApp\\NotesApp\\obj\\",
+      "outputPath": "C:\\Users\\525.khokhlovns\\source\\repos\\NotesAppRepo\\NotesApp\\src\\NotesApp\\NotesApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\525.khokhlovns\\AppData\\Roaming\\NuGet\\NuGet.Config",

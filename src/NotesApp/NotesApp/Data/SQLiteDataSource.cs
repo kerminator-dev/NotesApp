@@ -16,7 +16,7 @@ namespace NotesApp.Data
         /// <summary>
         /// Строка подключения к БД SQLite
         /// </summary>
-        private static string ConnectionString { get; } = @"Data Source=D:\Applications\SQLiteStudio\NotesDB;";
+        private static string ConnectionString { get; } = @"Data Source=NotesDB;";
 
         private readonly SqliteConnection _connection;
 
