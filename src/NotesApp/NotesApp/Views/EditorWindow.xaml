@@ -1,0 +1,334 @@
+﻿<Window x:Class="NotesApp.Views.EditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:properties="clr-namespace:NotesApp.Properties"
+        mc:Ignorable="d"
+        Title="EditorWindow"
+        MinHeight="600"
+        MinWidth="350"
+        xmlns:viewmodel="clr-namespace:NotesApp.ViewModels" 
+        Height="594" 
+        Width="344"
+        ResizeMode="CanResizeWithGrip"
+        WindowStyle="None"
+        MouseDown="Window_MouseDown"
+        BorderThickness="0"
+        x:Name="Window"
+        AllowsTransparency="True"
+        Top="{Binding Source={x:Static properties:Settings.Default},
+                               Path=EditorWindowTop, Mode=TwoWay}"
+        Left="{Binding Source={x:Static properties:Settings.Default},
+                               Path=EditorWindowLeft, Mode=TwoWay}"
+        Topmost="True" Closing="Window_Closing">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0"/>
+    </WindowChrome.WindowChrome>
+
+    <Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+
+                    <!-- Анимация окна -->
+                    <DoubleAnimation Storyboard.TargetName="Window"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                From="0.0" To="1.0" Duration="00:00:0.4"
+                                />
+
+                    <!-- Анимация заголовка - скатывание вниз -->
+                    <DoubleAnimation From="0" To="50" Duration="00:00:0.63"
+                                Storyboard.TargetName="HeaderPanel"
+                                Storyboard.TargetProperty="Height">
+                        <DoubleAnimation.EasingFunction>
+                            <QuarticEase EasingMode="EaseInOut"
+                                           />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+
+                    <DoubleAnimation Storyboard.TargetName="BackButton"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                BeginTime="00:00:0.4"
+                                From="0.0" To="1.0" Duration="00:00:0.5"
+                                />
+
+                    <DoubleAnimation Storyboard.TargetName="SaveButton"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                     BeginTime="00:00:00.6"
+                                From="0.0" To="1.0" Duration="00:00:0.5"
+                                />
+
+                    <DoubleAnimation Storyboard.TargetName="TitleTextBox"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                     BeginTime="00:00:00.8"
+                                From="0.0" To="1.0" Duration="00:00:0.5"
+                                />
+                    <DoubleAnimation Storyboard.TargetName="DateTextBlock"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                BeginTime="00:00:01"
+                                From="0.0" To="1.0" Duration="00:00:0.5"
+                                />
+
+                    <DoubleAnimation Storyboard.TargetName="ContentTextBox"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                BeginTime="00:00:01.3"
+                                From="0.0" To="1.0" Duration="00:00:0.5"
+                                />
+
+                    <!-- Анимация подвала -->
+                    <DoubleAnimation From="0" To="38" Duration="00:00:0.4"
+                                BeginTime="00:00:02.3"
+                                Storyboard.TargetName="FooterPanel"
+                                Storyboard.TargetProperty="Height"
+                                
+                                >
+                        <DoubleAnimation.EasingFunction>
+                            <QuarticEase EasingMode="EaseInOut"
+                                           />
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+
+                    <DoubleAnimation Storyboard.TargetName="SymbolsCountTextBlock"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                BeginTime="00:00:01.7"
+                                From="0.0" To="1.0" Duration="00:00:0.4"
+                                />
+
+                    <DoubleAnimation Storyboard.TargetName="FontSizeTextBlock"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                BeginTime="00:00:02"
+                                From="0.0" To="1.0" Duration="00:00:0.4"
+                                />
+
+                    <DoubleAnimation Storyboard.TargetName="FontSlider"
+                                     
+                                Storyboard.TargetProperty="Opacity"
+                                BeginTime="00:00:02"
+                                From="0.0" To="1.0" Duration="00:00:0.4"
+                                />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
+
+    <Grid Background="#eef2f5">
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Name="Header" Height="auto"/>
+            <RowDefinition Name="Main" />
+            <RowDefinition Name="Footer" Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <ContentControl Grid.Column="0" Grid.Row="0" MouseDoubleClick="Header_MouseDoubleClick">
+            <DockPanel x:Name="HeaderPanel">
+                <Border Background="White" Padding="20 10 20 10">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#e4e5e6" 
+                                          BlurRadius="8" 
+                                          Direction="-90"
+                                          RenderingBias="Performance" />
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button x:Name="BackButton"  Grid.Row="0" 
+                                d:Opacity="1"
+                                Opacity="0"
+                                ToolTip="Вернуться к списку"
+                                Grid.Column="0"  
+                                Height="30" 
+                                HorizontalAlignment="Left"
+                                Cursor="Hand"
+                                FontSize="28"
+                                VerticalContentAlignment="Center"
+                                Background="Transparent" 
+                                hc:BorderElement.CornerRadius="16"                               
+                                Foreground="#FFBEBEBF" 
+                                Content="⬅" 
+                                HorizontalContentAlignment="Left"
+                                Style="{StaticResource ButtonCustom}" 
+                                FontFamily="Arial Black" 
+                                FontWeight="Normal" Click="BackButton_Click"/>
+
+                        <TextBlock x:Name="SaveButton"  Grid.Row="0" 
+                                   Padding="0 5 0 0"
+                                   ToolTip="Сохранить изменения"
+                                   d:Opacity="1"
+                                   Opacity="0"
+                                   Grid.Column="1"  
+                                   Height="30" 
+                                   Width="30"
+                                   Cursor="Hand"
+                                   HorizontalAlignment="Right"
+                                   FontSize="20"
+                                   Background="Transparent" 
+                                   hc:BorderElement.CornerRadius="16"                               
+                                   Text="✔" 
+                                   FontFamily="Arial" 
+                                   FontWeight="Normal" 
+                                   FontStyle="Normal" 
+                                   VerticalAlignment="Stretch" 
+                                   TextAlignment="Center"
+                                   MouseDown="SaveButton_MouseDown">
+
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock" >
+                                    <Setter  Property="Foreground" Value="#5f72ea"/>
+                                    <Style.Triggers>
+
+                                        <DataTrigger Binding="{Binding Path=NoteSaved, Mode=OneWay, IsAsync=True}" Value="False">
+                                            <Setter  Property="Background" Value="#5f72ea"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Path=NoteSaved, Mode=OneWay, IsAsync=True}" Value="True">
+                                            <Setter  Property="Foreground" Value="#FFBEBEBF"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+
+                        </TextBlock>
+                    </Grid>
+                </Border>
+            </DockPanel>
+        </ContentControl>
+
+        <DockPanel  Grid.Column="0" Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBox x:Name="TitleTextBox"
+                         d:Opacity="1"
+                         xmlns:d.DesignOpacity="1"
+                         SelectionBrush="#5f72ea"
+                         Opacity="0"
+                         Grid.Column="0" Grid.Row="0"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         Background="Transparent"
+                         Cursor="IBeam"
+                         BorderThickness="0"
+                         TextWrapping="Wrap"
+                         Padding="20 20 20 10"
+                         FontSize="18"
+                         Text="{Binding Path=Title, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="#8c8c8c" 
+                         FontWeight="Bold"
+                         FontFamily="Arial Rounded MT Bold"
+                         MaxLength="255" 
+                         />
+                <TextBlock x:Name="DateTextBlock"
+                           d:Opacity="1"
+                           ToolTip="Дата создания"
+                           Grid.Column="0" Grid.Row="1"
+                           Opacity="0"
+                           Padding="20 0 20 0"
+                           Text="24.07.2021, 14:40:45" 
+                           FontSize="12"
+                           FontFamily="Arial Rounded MT Bold"
+                           Foreground="#FFBEBEBF"
+                           Margin="0 2 0 10"/>
+
+                <TextBox Text="{Binding Path=Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                         d:Opacity="1"
+                         Grid.Column="0" Grid.Row="2"
+                         Opacity="0"
+                         Background="Transparent"
+                         FontFamily="Arial Rounded MT Bold"
+                         MaxLength="102400"
+                         Padding="20 0 20 0"
+                         FontSize="14"
+                         BorderThickness="0"
+                         ScrollViewer.CanContentScroll="True"
+                         UseLayoutRounding="False"
+                         VerticalScrollBarVisibility="Visible"
+                         Foreground="#8c8c8c" 
+                         Cursor="IBeam" 
+                         AcceptsReturn="True"
+                         VerticalContentAlignment="Top"
+                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         TextWrapping="Wrap"
+                         HorizontalAlignment="Stretch" 
+                         SelectionBrush="#5f72ea"
+                         x:Name="ContentTextBox" 
+                         VerticalAlignment="Stretch"/>
+            </Grid>
+        </DockPanel>
+
+        <Border x:Name="FooterPanel" d:Height="auto" Height="0" Background="White"  Grid.Column="0" Grid.Row="2" Padding="20 10">
+            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Column="0" Grid.Row="0" Name="SymbolsCountTextBlock"
+                           Text="{Binding Path=Content.Length, Mode=OneWay}"
+                           Opacity="0"
+                           FontSize="12"
+                           Foreground="#8c8c8c"
+                           FontFamily="Arial Rounded MT Bold"
+                           VerticalAlignment="Center"
+                           d:Opacity="1"/>
+
+                <StackPanel Grid.Column="1" 
+                            Orientation="Horizontal" 
+                            HorizontalAlignment="Right">
+                    <TextBlock Text="Размер:"
+                               Opacity="0"
+                               Name="FontSizeTextBlock"
+                               d:Opacity="1"
+                               Grid.Column="1"
+                               FontSize="12"
+                               Foreground="#8c8c8c"
+                               FontFamily="Arial Rounded MT Bold"
+                               VerticalAlignment="Center"/>
+                    <Slider x:Name="FontSlider" 
+                            Opacity="0"
+                            d:Opacity="1"
+                            Margin="10 0 0 0"
+                            hc:TipElement.Visibility="Visible"
+                            hc:TipElement.Placement="Top"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Cursor="Hand"
+                            Width="132"
+                            Maximum="26"
+                            Minimum="10"
+                            ValueChanged="FontSlider_ValueChanged"
+                            Loaded="FontSlider_Loaded"/>
+
+
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
