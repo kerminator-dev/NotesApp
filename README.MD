@@ -1,4 +1,4 @@
-# Notes App - простое приложение для работы с заметками
+# Notes App - приложение для работы с заметками
 
 ![alt text](https://github.com/kerminator-dev/NotesApp/blob/main/img/preview.gif?raw=true)
 
