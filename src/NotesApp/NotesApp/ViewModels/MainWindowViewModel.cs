@@ -76,7 +76,7 @@ namespace NotesApp.ViewModels
             foreach (var card in Cards)
             {
                 card.OnCardClick += OnCardClick;
-                card.OnDelete += OnCardDelete;
+                card.OnDeleteButtonClick += OnCardDelete;
             }
         }
     }

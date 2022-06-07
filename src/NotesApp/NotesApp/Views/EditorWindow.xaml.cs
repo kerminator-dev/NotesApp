@@ -74,7 +74,7 @@ namespace NotesApp.Views
         }
 
         /// <summary>
-        /// При попытке выхода
+        /// При выходе
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

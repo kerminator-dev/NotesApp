@@ -16,19 +16,10 @@ namespace NotesApp.Views
         public delegate void CardEventHandler(string clickedNoteId, EventArgs e);
 
         // Событие при удалении карточки (для обновления основной формы с карточками) 
-        public event CardEventHandler? OnDelete;
+        public event CardEventHandler? OnDeleteButtonClick;
 
         // Соыбтие при нажатии на карточку (для открытия окна редактирования заметки из главной формы)
         public event CardEventHandler? OnCardClick;
-
-        /// <summary>
-        /// Радиус углов карточки
-        /// </summary>
-        public CornerRadius CornerRadius
-        {
-            get => ControlBorder.CornerRadius;
-            set => ControlBorder.CornerRadius = value;
-        }
 
         public CardControl(CardControlViewModel cardControlViewModel, TimeSpan animationBeginTime)
         {
@@ -55,9 +46,8 @@ namespace NotesApp.Views
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            Card_UserControl.Height = 0;
-            if (OnDelete != null)
-                OnDelete.Invoke(_viewModel.ID, e);
+            if (OnDeleteButtonClick != null)
+                OnDeleteButtonClick.Invoke(_viewModel.ID, e);
         }
 
         private void Control_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)

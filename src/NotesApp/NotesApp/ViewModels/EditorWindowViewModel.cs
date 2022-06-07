@@ -18,6 +18,11 @@ namespace NotesApp.ViewModels
         /// </summary>
         private readonly INote _note;
 
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
+        private string _errorMessage = string.Empty;
+
         #endregion
 
         #region Свойства
@@ -89,6 +94,22 @@ namespace NotesApp.ViewModels
             {
                 _noteSaved = value;
                 OnPropertyChanged(nameof(NoteSaved));
+            }
+        }
+
+        public bool HasError => string.IsNullOrEmpty(_errorMessage);
+        
+        /// <summary>
+        /// Сообщение об ошибке
+        /// </summary>
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            private set
+            {
+                _errorMessage = value;
+
+                OnPropertyChanged(nameof(ErrorMessage));
             }
         }
 

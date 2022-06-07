@@ -28,6 +28,7 @@
     </WindowChrome.WindowChrome>
     <Window.Resources>
         <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
     </Window.Resources>
 
     <Window.Triggers>
@@ -223,15 +224,19 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-
+                <TextBlock Text="{Binding ErrorMessage}" 
+                           Visibility="{Binding HasError, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                           Foreground="Red"
+                           FontSize="12"/>
                 <TextBox x:Name="TitleTextBox"
                          d:Opacity="1"
                          xmlns:d.DesignOpacity="1"
                          SelectionBrush="#5f72ea"
                          Opacity="0"
-                         Grid.Column="0" Grid.Row="0"
+                         Grid.Column="0" Grid.Row="1"
                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                          Background="Transparent"
                          Cursor="IBeam"
@@ -248,7 +253,7 @@
                 <TextBlock x:Name="DateTextBlock"
                            d:Opacity="1"
                            ToolTip="Дата создания"
-                           Grid.Column="0" Grid.Row="1"
+                           Grid.Column="0" Grid.Row="2"
                            Opacity="0"
                            Padding="20 0 20 0"
                            Text="24.07.2021, 14:40:45" 
@@ -259,7 +264,7 @@
 
                 <TextBox Text="{Binding Path=Content, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                          d:Opacity="1"
-                         Grid.Column="0" Grid.Row="2"
+                         Grid.Column="0" Grid.Row="3"
                          Opacity="0"
                          Background="Transparent"
                          FontFamily="Arial Rounded MT Bold"
