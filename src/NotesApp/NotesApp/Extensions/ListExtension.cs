@@ -1,4 +1,5 @@
 ﻿using NotesApp.Models.Note;
+using NotesApp.ViewModels;
 using NotesApp.Views;
 using System;
 using System.Collections.Generic;
@@ -26,8 +27,8 @@ namespace NotesApp.Extensions
                 (
                     new CardControl
                     (
-                        note: notes[i],
-                        animationBeginTime: new TimeSpan(0, 0, 0, 0, (i) * animationOffset)
+                        cardControlViewModel: new CardControlViewModel(notes[i]),
+                        animationBeginTime: new TimeSpan(0, 0, 0, 0, i * animationOffset)
                     )
                 );
             }

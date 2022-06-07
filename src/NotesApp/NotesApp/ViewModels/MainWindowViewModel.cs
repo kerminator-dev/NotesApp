@@ -1,69 +1,33 @@
-﻿using NotesApp.Data;
-using NotesApp.Enums;
-using NotesApp.Extensions;
+﻿using NotesApp.Commands.MainWindowCommands;
+using NotesApp.Data;
 using NotesApp.Views;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+using System.Windows.Input;
 using static NotesApp.Views.CardControl;
 
 namespace NotesApp.ViewModels
 {
-    internal class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : ViewModelBase
     {
         #region Поля
         private List<CardControl> _cards;
+        #endregion
 
         // События
-        private readonly CardEventHandler _onCardClick;
-        private readonly CardEventHandler _onCardDelete;
-
-        #endregion
+        public event CardEventHandler OnCardClick;
+        public event CardEventHandler OnCardDelete;
 
         public IReadOnlyList<CardControl> Cards
         {
             get => _cards;
-            private set
+            set
             {
                 _cards = (List<CardControl>)value;
+
                 SubsribeToCardEvents();
-                RaisePropertyChanged(nameof(Cards));
+                OnPropertyChanged(nameof(Cards));
             }
         }
-
-        /// <summary>
-        /// Обновить список карточек
-        /// </summary>
-        /// <param name="groupType">Группа карточек</param>
-        public void UpdateCards(NotesGroup groupType)
-        {
-            switch (groupType)
-            {
-                case NotesGroup.All:
-                    Cards = DataSourceContainer.GetInstance().GetAllNotes().ToList().ToCardsList();
-                    break;
-                case NotesGroup.Recent:
-                    Cards = DataSourceContainer.GetInstance().GetRecentNotes().ToList().ToCardsList();
-                    break;
-                case NotesGroup.Old:
-                    Cards = DataSourceContainer.GetInstance().GetOldNotes().ToList().ToCardsList();
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="searchValue"></param>
-        public void SearchCards(string searchValue)
-        {
-            if (searchValue == String.Empty)
-                UpdateCards(NotesGroup.All);
-            else
-                Cards = DataSourceContainer.GetInstance().SearchNotes(searchValue).ToList().ToCardsList();
-        }
-
 
         /// <summary>
         /// Удалить заметку
@@ -75,7 +39,7 @@ namespace NotesApp.ViewModels
             // Удаление в БД
             DataSourceContainer.GetInstance().DeleteNote(noteID);
 
-            UpdateCards(NotesGroup.All);
+            // UpdateCards(NotesGroup.All);
 
             HandyControl.Controls.Notification.Show
             (
@@ -89,11 +53,19 @@ namespace NotesApp.ViewModels
             );
         }
 
-        public MainWindowViewModel(CardEventHandler onCardClick, CardEventHandler onCardDelete)
+        public readonly ICommand GetAllNotesCommand;
+        public readonly ICommand GetRecentNotesCommand;
+        public readonly ICommand GetOldNotesCommand;
+        public readonly ICommand SearchNotesCommand;
+
+        public MainWindowViewModel()
         {
-            _onCardClick = onCardClick;
-            _onCardDelete = onCardDelete;
             _cards = new List<CardControl>();
+
+            GetAllNotesCommand = new GetAllNotesCommand(this);
+            GetRecentNotesCommand = new GetRecentNotesCommand(this);
+            GetOldNotesCommand = new GetOldNotesCommand(this);
+            SearchNotesCommand = new SearchNotesCommand(this);
         }
 
         /// <summary>
@@ -103,16 +75,9 @@ namespace NotesApp.ViewModels
         {
             foreach (var card in Cards)
             {
-                card.OnCardClick += _onCardClick;
-                card.OnDelete += _onCardDelete;
+                card.OnCardClick += OnCardClick;
+                card.OnDelete += OnCardDelete;
             }
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

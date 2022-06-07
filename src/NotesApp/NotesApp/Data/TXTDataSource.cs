@@ -13,12 +13,12 @@ namespace NotesApp.Data
         /// <summary>
         /// Формат файлов
         /// </summary>
-        private const string _fileFormat = ".txt";
+        private const string FILE_FORMAT = ".txt";
 
         /// <summary>
         /// Паттерн для фильтрации файлов в папке
         /// </summary>
-        private const string _fileSearchPattern = "*" + _fileFormat;
+        private const string FILE_SEARCH_PATTERN = "*" + FILE_FORMAT;
 
         /// <summary>
         /// Директория заметок/текстовых файлов
@@ -26,6 +26,9 @@ namespace NotesApp.Data
         private readonly string _fileDirectory = "MyNotes";
 
         #endregion
+
+        #region Методы
+
         public void DeleteNote(string filePath)
         {
             if (File.Exists(filePath))
@@ -43,12 +46,12 @@ namespace NotesApp.Data
 
             var notes = new List<TXTNote>();
 
-            foreach (var filePath in Directory.GetFiles(_fileDirectory, _fileSearchPattern))
+            foreach (var filePath in Directory.GetFiles(_fileDirectory, FILE_SEARCH_PATTERN))
             {
                 var note = new TXTNote
                 (
                     id: filePath,
-                    title: Path.GetFileName(filePath).Replace(_fileFormat, ""),
+                    title: Path.GetFileName(filePath).Replace(FILE_FORMAT, ""),
                     content: File.ReadAllText(filePath),
                     created: File.GetCreationTime(filePath)
                 );
@@ -59,6 +62,10 @@ namespace NotesApp.Data
             return notes;
         }
 
+        /// <summary>
+        /// Получить пустую заметку
+        /// </summary>
+        /// <returns>Пустая заметка</returns>
         public INote GetEmptyNote()
         {
             return new TXTNote("-1", "Заголовок", "Основной текст", DateTime.Now);
@@ -77,7 +84,7 @@ namespace NotesApp.Data
             return new TXTNote
             (
                 id: filePath,
-                title: Path.GetFileName(filePath).Replace(_fileFormat, ""),
+                title: Path.GetFileName(filePath).Replace(FILE_FORMAT, ""),
                 content: File.ReadAllText(filePath),
                 created: File.GetCreationTime(filePath)
             );
@@ -95,12 +102,12 @@ namespace NotesApp.Data
             var dateTimeRangeStart = DateTime.Now.AddDays(-7);
             var notes = new List<TXTNote>();
 
-            foreach (var filePath in Directory.EnumerateFiles(_fileDirectory, _fileSearchPattern).Where(i => File.GetCreationTime(i) <= dateTimeRangeStart))
+            foreach (var filePath in Directory.EnumerateFiles(_fileDirectory, FILE_SEARCH_PATTERN).Where(i => File.GetCreationTime(i) <= dateTimeRangeStart))
             {
                 var note = new TXTNote
                 (
                     id: filePath,
-                    title: Path.GetFileName(filePath).Replace(_fileFormat, ""),
+                    title: Path.GetFileName(filePath).Replace(FILE_FORMAT, ""),
                     content: File.ReadAllText(filePath),
                     created: File.GetCreationTime(filePath)
                 );
@@ -124,12 +131,12 @@ namespace NotesApp.Data
             var notes = new List<TXTNote>();
 
 
-            foreach (var filePath in Directory.EnumerateFiles(_fileDirectory, _fileSearchPattern).Where(i => File.GetCreationTime(i) >= dateTimeRangeStart))
+            foreach (var filePath in Directory.EnumerateFiles(_fileDirectory, FILE_SEARCH_PATTERN).Where(i => File.GetCreationTime(i) >= dateTimeRangeStart))
             {
                 var note = new TXTNote
                 (
                     id: filePath,
-                    title: Path.GetFileName(filePath).Replace(_fileFormat, ""),
+                    title: Path.GetFileName(filePath).Replace(FILE_FORMAT, ""),
                     content: File.ReadAllText(filePath),
                     created: File.GetCreationTime(filePath)
                 );
@@ -146,12 +153,11 @@ namespace NotesApp.Data
         /// <param name="noteToSave">Заметка</param>
         public void SaveNote(INote noteToSave)
         {
-            noteToSave = (TXTNote)noteToSave;
-
             string filePath = noteToSave.ID;
-            string oldTitle = Path.GetFileName(filePath).Replace(_fileFormat, "");
+            string oldTitle = Path.GetFileName(filePath).Replace(FILE_FORMAT, "");
             string newTitle = noteToSave.Title;
 
+            // Если старое название файла (Title) отличается от нового названия (Title), то старый файл удаляется
             if (oldTitle != newTitle)
             {
 
@@ -161,10 +167,10 @@ namespace NotesApp.Data
                 }
 
                 // Название нового файла
-                filePath = Path.Combine(_fileDirectory, newTitle + _fileFormat);
+                filePath = Path.Combine(_fileDirectory, newTitle + FILE_FORMAT);
             }
 
-            // Если файла с указанным названием не существует, то он создаётся
+            // Если файла с указанным новым названием не существует, то он создаётся
             if (!File.Exists(filePath))
             {
                 try
@@ -173,7 +179,7 @@ namespace NotesApp.Data
                 }
                 catch (System.IO.IOException)
                 {
-                    filePath = Path.Combine(_fileDirectory, oldTitle + _fileFormat);
+                    filePath = Path.Combine(_fileDirectory, oldTitle + FILE_FORMAT);
                 }
             }
 
@@ -187,6 +193,11 @@ namespace NotesApp.Data
             }
         }
 
+        /// <summary>
+        /// Найти заметки
+        /// </summary>
+        /// <param name="valueToSearch">Ключевое значение для поиска</param>
+        /// <returns>Cписок найденных заметок</returns>
         public IEnumerable<INote> SearchNotes(string valueToSearch)
         {
             if (!Directory.Exists(_fileDirectory))
@@ -194,13 +205,13 @@ namespace NotesApp.Data
 
             var notes = new List<TXTNote>();
 
-            foreach (var filePath in Directory.EnumerateFiles(_fileDirectory, _fileSearchPattern)
+            foreach (var filePath in Directory.EnumerateFiles(_fileDirectory, FILE_SEARCH_PATTERN)
                     .Where(i => File.ReadAllText(i).Contains(valueToSearch) || i.Contains(valueToSearch)))
             {
                 var note = new TXTNote
                 (
                     id: filePath,
-                    title: Path.GetFileName(filePath).Replace(_fileFormat, ""),
+                    title: Path.GetFileName(filePath).Replace(FILE_FORMAT, ""),
                     content: File.ReadAllText(filePath),
                     created: File.GetCreationTime(filePath)
                 );
@@ -210,5 +221,7 @@ namespace NotesApp.Data
 
             return notes;
         }
+
+        #endregion 
     }
 }

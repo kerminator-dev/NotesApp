@@ -158,9 +158,9 @@
                                       FontFamily="Yu Gothic UI Semibold"/>
 
                         <hc:ButtonGroup d:Opacity="1" Opacity="0" x:Name="Tabs_ButtonGroup" Margin="0,16,0,0"  Style="{StaticResource ButtonGroupSolid}" Cursor="Hand" FontFamily="Arial Rounded MT Bold">
-                            <RadioButton ToolTip="Все заметки" BorderThickness="0" Foreground="#b6b6b6" x:Name="AllRadioButton" Background="#eff0f2" Content="Все" IsChecked="True" FontWeight="Bold" Checked="AllRadioButton_Checked"/>
-                            <RadioButton ToolTip="Заметки за последние 7 дней" BorderThickness="0" Foreground="#b6b6b6" x:Name="RecentRadioButton" Background="#eff0f2" Content="Недавние" FontWeight="Bold" Checked="RecentRadioButton_Checked"  />
-                            <RadioButton ToolTip="Старые заметки" BorderThickness="0" Foreground="#b6b6b6" x:Name="OldRadioButton" Background="#eff0f2" Content="Старые" FontWeight="Bold" Checked="OldRadioButton_Checked"  />
+                            <RadioButton Command="{Binding GetAllNotesCommand}" ToolTip="Все заметки" BorderThickness="0" Foreground="#b6b6b6" x:Name="AllRadioButton" Background="#eff0f2" Content="Все" IsChecked="True" FontWeight="Bold" Checked="AllRadioButton_Checked"/>
+                            <RadioButton Command="{Binding GetRecentNotesCommand}" ToolTip="Заметки за последние 7 дней" BorderThickness="0" Foreground="#b6b6b6" x:Name="RecentRadioButton" Background="#eff0f2" Content="Недавние" FontWeight="Bold" Checked="RecentRadioButton_Checked"  />
+                            <RadioButton Command="{Binding GetRecentNotesCommand}" ToolTip="Старые заметки" BorderThickness="0" Foreground="#b6b6b6" x:Name="OldRadioButton" Background="#eff0f2" Content="Старые" FontWeight="Bold" Checked="OldRadioButton_Checked"  />
                         </hc:ButtonGroup>
                     </StackPanel>
                 </Border>

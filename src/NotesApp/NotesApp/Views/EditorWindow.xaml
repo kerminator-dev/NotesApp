@@ -9,7 +9,7 @@
         Title="EditorWindow"
         MinHeight="600"
         MinWidth="350"
-        xmlns:viewmodel="clr-namespace:NotesApp.ViewModels" 
+        xmlns:viewmodel="clr-namespace:NotesApp.ViewModels" xmlns:converters="clr-namespace:NotesApp.Converters"
         Height="594" 
         Width="344"
         ResizeMode="CanResizeWithGrip"
@@ -26,6 +26,9 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
+    <Window.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+    </Window.Resources>
 
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
@@ -188,6 +191,7 @@
                                    FontStyle="Normal" 
                                    VerticalAlignment="Stretch" 
                                    TextAlignment="Center"
+                                   IsEnabled="{Binding IsSaved, Converter={StaticResource Boolean2BooleanReConverter}}"
                                    MouseDown="SaveButton_MouseDown">
 
                             <TextBlock.Style>

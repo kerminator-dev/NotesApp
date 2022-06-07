@@ -1,7 +1,8 @@
-﻿using NotesApp.Models.Note;
-
-namespace NotesApp.Data
+﻿namespace NotesApp.Data
 {
+    /// <summary>
+    /// Класс-хранилище текущего источника данных (БД, .txt и т. д.)
+    /// </summary>
     public class DataSourceContainer
     {
         private static IDataSource? _dataSource;
@@ -16,10 +17,13 @@ namespace NotesApp.Data
             return _dataSource;
         }
 
+
         public static IDataSource GetInstance(IDataSource dataSource)
         {
             if (_dataSource == null)
+            {
                 _dataSource = dataSource;
+            }
 
             return _dataSource;
         }

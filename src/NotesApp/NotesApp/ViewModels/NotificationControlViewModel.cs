@@ -2,7 +2,7 @@
 
 namespace NotesApp.ViewModels
 {
-    public class NotificationControlViewModel
+    public class NotificationControlViewModel : ViewModelBase
     {
         private readonly Notification _notification;
 

@@ -5,13 +5,13 @@ namespace NotesApp.Models.Note
     public interface INote
     {
         public string ID { get; set; }
-        // Заголовок заметки
+        // Загоетки
         public string Title { get; set; }
 
-        // Основной текст заметки
+        // Оснот заметки
         public string Content { get; set; }
 
-        // Дата создания заметки
+        // Дата заметки
         public DateTime Created { get; set; }
     }
 }

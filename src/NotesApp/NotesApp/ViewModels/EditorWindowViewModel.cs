@@ -1,18 +1,17 @@
 ﻿using NotesApp.Data;
 using NotesApp.Models.Note;
 using System;
-using System.ComponentModel;
 
 namespace NotesApp.ViewModels
 {
-    public class EditorWindowViewModel : INotifyPropertyChanged
+    public class EditorWindowViewModel : ViewModelBase
     {
         #region Поля
 
         /// <summary>
         /// Сохранена ли заметка
         /// </summary>
-        private bool _noteSaved = false;
+        private bool _noteSaved = true;
 
         /// <summary>
         /// Заметка
@@ -31,11 +30,8 @@ namespace NotesApp.ViewModels
             get => _note.ID;
             private set
             {
-                if (_note.ID == value)
-                    return;
-
                 _note.ID = value;
-                RaisePropertyChanged(nameof(Id));
+                OnPropertyChanged(nameof(Id));
                 NoteSaved = false;
             }
         }
@@ -48,11 +44,9 @@ namespace NotesApp.ViewModels
             get => _note.Title;
             set
             {
-                if (_note.Title == value)
-                    return;
-
                 _note.Title = value;
-                RaisePropertyChanged(nameof(Title));
+
+                OnPropertyChanged(nameof(Title));
                 NoteSaved = false;
             }
         }
@@ -65,11 +59,8 @@ namespace NotesApp.ViewModels
             get => _note.Content;
             set
             {
-                if (_note.Content == value)
-                    return;
-
                 _note.Content = value;
-                RaisePropertyChanged(nameof(Content));
+                OnPropertyChanged(nameof(Content));
                 NoteSaved = false;
             }
         }
@@ -82,11 +73,8 @@ namespace NotesApp.ViewModels
             get => _note.Created;
             set
             {
-                if (_note.Created == value)
-                    return;
-
                 _note.Created = value;
-                RaisePropertyChanged(nameof(Created));
+                OnPropertyChanged(nameof(Created));
                 NoteSaved = false;
             }
         }
@@ -99,11 +87,8 @@ namespace NotesApp.ViewModels
             get => _noteSaved;
             private set
             {
-                if (_noteSaved == value)
-                    return;
-
                 _noteSaved = value;
-                RaisePropertyChanged(nameof(NoteSaved));
+                OnPropertyChanged(nameof(NoteSaved));
             }
         }
 
@@ -117,13 +102,6 @@ namespace NotesApp.ViewModels
         public EditorWindowViewModel(string noteID)
         {
             _note = DataSourceContainer.GetInstance().GetNote(noteID);
-        }
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        public void RaisePropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>

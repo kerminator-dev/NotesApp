@@ -1,5 +1,4 @@
-﻿using NotesApp.Models.Note;
-using NotesApp.ViewModels;
+﻿using NotesApp.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +11,7 @@ namespace NotesApp.Views
     /// </summary>
     public partial class CardControl : UserControl
     {
-        private CardControlViewModel _viewModel;
+        private readonly CardControlViewModel _viewModel;
 
         public delegate void CardEventHandler(string clickedNoteId, EventArgs e);
 
@@ -31,36 +30,26 @@ namespace NotesApp.Views
             set => ControlBorder.CornerRadius = value;
         }
 
-        public SolidColorBrush BaseDateColor { get; set; }
-        public SolidColorBrush BaseTextColor { get; set; }
-        public SolidColorBrush HoverTextColor { get; set; }
-
-        public CardControl(INote note, TimeSpan animationBeginTime)
+        public CardControl(CardControlViewModel cardControlViewModel, TimeSpan animationBeginTime)
         {
             InitializeComponent();
 
-            _viewModel = new CardControlViewModel(note);
+            _viewModel = cardControlViewModel;
             DataContext = _viewModel;
             OpacityAnimation.BeginTime = animationBeginTime;
-
-            BaseTextColor = new SolidColorBrush(Color.FromRgb(140, 140, 140));
-            HoverTextColor = new SolidColorBrush(Color.FromRgb(255, 255, 255));
-            BaseDateColor = new SolidColorBrush(Color.FromRgb(190, 190, 191));
         }
 
         private void Control_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            ContentTextBlock.Foreground = HoverTextColor;
-            CreatedTextBlock.Foreground = HoverTextColor;
-
+            ContentTextBlock.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+            CreatedTextBlock.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
             DeleteButton.Visibility = Visibility.Visible;
         }
 
         private void Control_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            ContentTextBlock.Foreground = BaseTextColor;
-            CreatedTextBlock.Foreground = BaseDateColor;
-
+            ContentTextBlock.Foreground = new SolidColorBrush(Color.FromRgb(140, 140, 140));
+            CreatedTextBlock.Foreground = new SolidColorBrush(Color.FromRgb(190, 190, 191));
             DeleteButton.Visibility = Visibility.Hidden;
         }
 

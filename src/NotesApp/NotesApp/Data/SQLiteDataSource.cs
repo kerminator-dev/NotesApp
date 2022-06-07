@@ -414,11 +414,18 @@ namespace NotesApp.Data
             return (IList<INote>)notes.FindAll(i => i.Content.Contains(searchValue, StringComparison.OrdinalIgnoreCase) || i.Title.Contains(searchValue, StringComparison.OrdinalIgnoreCase));
         }
 
+        /// <summary>
+        /// Освободить ресурсы
+        /// </summary>
         public void Dispose()
         {
             _connection.Dispose();
         }
 
+        /// <summary>
+        /// Получить пустую заметку
+        /// </summary>
+        /// <returns>Пустая заметка</returns>
         public INote GetEmptyNote()
         {
             return new SQLiteNote("-1", "Заголовок", "Основной текст", DateTime.Now);

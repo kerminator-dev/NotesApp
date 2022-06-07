@@ -1,5 +1,4 @@
-﻿using NotesApp.Enums;
-using NotesApp.ViewModels;
+﻿using NotesApp.ViewModels;
 using System;
 using System.ComponentModel;
 using System.Timers;
@@ -11,8 +10,13 @@ namespace NotesApp.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : System.Windows.Window
+    public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Задержка перед появлением карт
+        /// </summary>
+        private const int CARDS_FLOW_START_DELAY = 1900;
+        private readonly MainWindowViewModel _viewModel;
         private EditorWindow _editorWindow;
 
         private EditorWindow EditorWindow
@@ -28,48 +32,23 @@ namespace NotesApp.Views
             }
         }
 
-        private readonly MainWindowViewModel _viewModel;
+        public MainWindow(MainWindowViewModel viewModel)
+        {
+            InitializeComponent();
+            _editorWindow = new EditorWindow();
+            _viewModel = viewModel;
+            _viewModel.OnCardClick += Card_OnClick;
+            _viewModel.OnCardDelete += Card_OnDelete;
+        }
 
         private void EditorWindow_Closing(object? sender, CancelEventArgs e)
         {
-            _viewModel.UpdateCards(_selectedGroup);
             ScrollViewer?.ScrollToTop();
-        }
-
-        /// <summary>
-        /// Выбранная группа
-        /// </summary>
-        private NotesGroup _selectedGroup;
-        private NotesGroup SelectedGroup
-        {
-            set
-            {
-                _selectedGroup = value;
-
-                if (_viewModel != null)
-                {
-                    _viewModel.UpdateCards(_selectedGroup);
-                    ScrollViewer?.ScrollToTop();
-                }
-            }
-        }
-
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            _editorWindow = new EditorWindow();
-            _viewModel = new MainWindowViewModel
-            (
-                onCardClick: Card_OnClick,
-                onCardDelete: Card_OnDelete
-            );
-            this.DataContext = _viewModel;
         }
 
         private void SearchTextBox_KeyUp(object sender, KeyEventArgs e)
         {
-            _viewModel.SearchCards(SearchTextBox.Text);
+            _viewModel.SearchNotesCommand.Execute(SearchTextBox.Text);
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -99,7 +78,7 @@ namespace NotesApp.Views
         }
 
         /// <summary>
-        /// Событие для CardControl
+        /// Событие для CardControl для открытия окна редактирования
         /// </summary>
         /// <param name="clickedNoteId">ID нажатой карточки-заметки</param>
         /// <param name="e"></param>
@@ -112,7 +91,7 @@ namespace NotesApp.Views
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Отображение карточек с задержкой (после выполнения анимации окна)
-            var timer = new Timer(1900);
+            var timer = new Timer(CARDS_FLOW_START_DELAY);
             timer.Elapsed += ShowCards;
             timer.AutoReset = false;
             timer.Start();
@@ -122,23 +101,25 @@ namespace NotesApp.Views
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                _viewModel.UpdateCards(_selectedGroup);
+                _viewModel?.GetAllNotesCommand.Execute(null);
             }));
+
+            (sender as Timer)?.Dispose();
         }
 
         private void AllRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            SelectedGroup = NotesGroup.All;
+            _viewModel?.GetAllNotesCommand.Execute(null);
         }
 
         private void RecentRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            SelectedGroup = NotesGroup.Recent;
+            _viewModel?.GetRecentNotesCommand.Execute(null);
         }
 
         private void OldRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            SelectedGroup = NotesGroup.Old;
+            _viewModel?.GetOldNotesCommand.Execute(null);
         }
 
         private void Window_Closed(object sender, EventArgs e)

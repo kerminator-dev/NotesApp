@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/XMSF4AcEpgzHSVeuTcVI78NcxXElPe4+crRycjtX9mKjxWjxnYEdGXl4lXLe6fCrXWYSg3dBQ2VNOTyvXwmpg==",
+  "dgSpecHash": "uQBejy6/clAlXvu9c1drsd/iQVfxryuBCDbX0nch2SM6vGKzFIvBy9Y2ivzJAJBWoRzjhFcMJ+dWzblNFAw5ow==",
   "success": true,
-  "projectFilePath": "C:\\Users\\525.khokhlovns\\source\\repos\\NotesAppRepo\\NotesApp\\src\\NotesApp\\NotesApp\\NotesApp.csproj",
+  "projectFilePath": "C:\\Users\\525.khokhlovns\\source\\repos\\clones\\NotesApp\\src\\NotesApp\\NotesApp\\NotesApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\525.khokhlovns\\.nuget\\packages\\handycontrol\\3.3.0\\handycontrol.3.3.0.nupkg.sha512",
     "C:\\Users\\525.khokhlovns\\.nuget\\packages\\microsoft.data.sqlite.core\\6.0.4\\microsoft.data.sqlite.core.6.0.4.nupkg.sha512",
