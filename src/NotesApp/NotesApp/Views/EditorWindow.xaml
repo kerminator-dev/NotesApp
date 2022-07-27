@@ -9,7 +9,7 @@
         Title="EditorWindow"
         MinHeight="600"
         MinWidth="350"
-        xmlns:viewmodel="clr-namespace:NotesApp.ViewModels" xmlns:converters="clr-namespace:NotesApp.Converters"
+        xmlns:viewmodel="clr-namespace:NotesApp.ViewModels" xmlns:converters="clr-namespace:NotesApp.Converters" d:DataContext="{d:DesignInstance Type=viewmodel:EditorWindowViewModel}"
         Height="594" 
         Width="344"
         ResizeMode="CanResizeWithGrip"
@@ -173,7 +173,7 @@
                                 FontFamily="Arial Black" 
                                 FontWeight="Normal" Click="BackButton_Click"/>
 
-                        <TextBlock x:Name="SaveButton"  Grid.Row="0" 
+                        <Button x:Name="SaveButton"  Grid.Row="0" 
                                    Padding="0 5 0 0"
                                    ToolTip="Сохранить изменения"
                                    d:Opacity="1"
@@ -186,31 +186,22 @@
                                    FontSize="20"
                                    Background="Transparent" 
                                    hc:BorderElement.CornerRadius="16"                               
-                                   Text="✔" 
+                                   Content="✔" 
                                    FontFamily="Arial" 
                                    FontWeight="Normal" 
                                    FontStyle="Normal" 
-                                   VerticalAlignment="Stretch" 
-                                   TextAlignment="Center"
-                                   IsEnabled="{Binding IsSaved, Converter={StaticResource Boolean2BooleanReConverter}}"
-                                   MouseDown="SaveButton_MouseDown">
+                                   VerticalAlignment="Stretch"
+                                   IsEnabled="{Binding NoteSaved, Converter={StaticResource InverseBooleanConverter}, UpdateSourceTrigger=Default}"
+                                   Command="{Binding Path=SaveCommand}">
 
-                            <TextBlock.Style>
-                                <Style TargetType="TextBlock" >
+                            <Button.Style>
+                                <Style TargetType="Button" >
                                     <Setter  Property="Foreground" Value="#5f72ea"/>
-                                    <Style.Triggers>
-
-                                        <DataTrigger Binding="{Binding Path=NoteSaved, Mode=OneWay, IsAsync=True}" Value="False">
-                                            <Setter  Property="Background" Value="#5f72ea"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Path=NoteSaved, Mode=OneWay, IsAsync=True}" Value="True">
-                                            <Setter  Property="Foreground" Value="#FFBEBEBF"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
+                                    <Setter Property="BorderThickness" Value="0"/>
                                 </Style>
-                            </TextBlock.Style>
+                            </Button.Style>
 
-                        </TextBlock>
+                        </Button>
                     </Grid>
                 </Border>
             </DockPanel>

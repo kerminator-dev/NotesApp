@@ -27,7 +27,7 @@ namespace NotesApp.Extensions
                 (
                     new CardControl
                     (
-                        cardControlViewModel: new CardControlViewModel(notes[i]),
+                        cardControlViewModel: new NoteViewModel(notes[i]),
                         animationBeginTime: new TimeSpan(0, 0, 0, 0, i * animationOffset)
                     )
                 );

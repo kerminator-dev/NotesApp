@@ -1,6 +1,11 @@
-﻿using NotesApp.Data;
+﻿using HandyControl.Controls;
+using HandyControl.Data;
+using NotesApp.Commands;
+using NotesApp.Data;
 using NotesApp.Models.Note;
+using NotesApp.Views;
 using System;
+using System.Windows.Input;
 
 namespace NotesApp.ViewModels
 {
@@ -23,6 +28,7 @@ namespace NotesApp.ViewModels
         /// </summary>
         private string _errorMessage = string.Empty;
 
+        private CommandBase _saveCommand;
         #endregion
 
         #region Свойства
@@ -105,7 +111,7 @@ namespace NotesApp.ViewModels
         public string ErrorMessage
         {
             get => _errorMessage;
-            private set
+            set
             {
                 _errorMessage = value;
 
@@ -113,25 +119,61 @@ namespace NotesApp.ViewModels
             }
         }
 
+        /// <summary>
+        /// Комманда - сохранить заметку
+        /// </summary>
+        public CommandBase SaveCommand
+        {
+            get
+            {
+                return _saveCommand;
+            }
+            
+        }
+
         #endregion
 
         public EditorWindowViewModel()
         {
+            _saveCommand = new RelayCommand
+            (
+                execute: SaveCommand_Execute,
+                canExecute: SaveCommand_CanExecute
+            );
             _note = DataSourceContainer.GetInstance().GetEmptyNote();
         }
 
         public EditorWindowViewModel(string noteID)
         {
+            _saveCommand = new RelayCommand
+            (
+                execute: SaveCommand_Execute,
+                canExecute: SaveCommand_CanExecute
+            );
             _note = DataSourceContainer.GetInstance().GetNote(noteID);
         }
 
-        /// <summary>
-        /// Сохранить изменения
-        /// </summary>
-        public void SaveChanges()
+        #region Методы для ICommand SaveCommand
+
+        private void SaveCommand_Execute(object parameter)
         {
             DataSourceContainer.GetInstance().SaveNote(this._note);
             NoteSaved = true;
+            Notification.Show(new NotificationControl(new Models.Notification("Заметка успешно сохранена")), ShowAnimation.None);
+            SaveCommand.OnCanExecuteChanged();
         }
+
+        private bool SaveCommand_CanExecute(object parameter)
+        {
+            if (Title == String.Empty || Content == String.Empty)
+            {
+                ErrorMessage = "Заголовок и основной текст не должны быть пустыми!";
+                return false;
+            }
+
+            return true;
+        }
+
+        #endregion
     }
 }

@@ -11,16 +11,19 @@ namespace NotesApp
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            MainWindowViewModel viewModel = new MainWindowViewModel();
-            MainWindow = new MainWindow
-            (
-                viewModel
-            );
-            MainWindow.DataContext = viewModel;
+            MainWindow = CreateMainWindow();
             MainWindow.Show();
 
-
             base.OnStartup(e);
+        }
+
+        private MainWindow CreateMainWindow()
+        {
+            var viewModel = new MainWindowViewModel();
+            var window = new MainWindow(viewModel);
+            window.DataContext = viewModel;
+
+            return window;
         }
     }
 }

@@ -2,19 +2,195 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="clr-namespace:NotesApp.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodel:MainWindowViewModel}"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         x:Class="NotesApp.Views.MainWindow"
+        xmlns:viewModels="clr-namespace:NotesApp.ViewModels"
         mc:Ignorable="d"
         Title="Notes" 
         Height="600"
         Width="350"
         ResizeMode="NoResize"
-        WindowStyle="None" Loaded="Window_Loaded"
+        WindowStyle="None"
         AllowsTransparency="True"
         Name="Window"
         WindowStartupLocation="Manual"
         
         Topmost="True" Closed="Window_Closed">
+
+    <Window.Resources>
+
+        <DataTemplate x:Key="NoteTemplate" DataType="{x:Type viewModels:NoteViewModel}"> 
+            <DataTemplate.Triggers>
+                <EventTrigger RoutedEvent="Loaded">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation
+                                     x:Name="OpacityAnimation"
+                                Storyboard.TargetProperty="Opacity"
+                                From="0.0" To="1.0" Duration="00:00:0.4"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+
+                <EventTrigger RoutedEvent="MouseEnter">
+
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation To="#6072ee" 
+                                    Storyboard.TargetName="ControlBorder"
+                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                            <ColorAnimation To="#dedefb" 
+                                    Storyboard.TargetName="ControlBorder"
+                                    Storyboard.TargetProperty="(Effect).(Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                            <ColorAnimation To="White" 
+                                    Storyboard.TargetName="TitleTextBlock"
+                                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                            <ColorAnimation To="White" 
+                                    Storyboard.TargetName="ContentTextBlock"
+                                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                            <ColorAnimation To="White" 
+                                    Storyboard.TargetName="CreatedTextBlock"
+                                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+
+                    <BeginStoryboard>
+
+                        <Storyboard>
+
+                            <ColorAnimation To="White" 
+                                    Storyboard.TargetName="ControlBorder"
+                                    Storyboard.TargetProperty="(Border.Background).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                            <ColorAnimation To="#e4e5e6" 
+                                    Storyboard.TargetName="ControlBorder"
+                                    Storyboard.TargetProperty="(Effect).(Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                            <ColorAnimation To="#8c8c8c" 
+                                    Duration="0:0:0"
+                                    Storyboard.TargetName="TitleTextBlock"
+                                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd" />
+                            <ColorAnimation To="#8C8C8C" 
+                                    Storyboard.TargetName="ContentTextBlock"
+                                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                            <ColorAnimation To="#BEBEBF" 
+                                    Storyboard.TargetName="CreatedTextBlock"
+                                    Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Color)" 
+                                    FillBehavior="HoldEnd" 
+                                    Duration="0:0:0"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </DataTemplate.Triggers>
+            <Border x:Name="ControlBorder"
+                    Cursor="Hand"
+                    BorderBrush="White"
+                    Background="White"
+                    CornerRadius="8" 
+                    Padding="10"
+                    Margin="0 0 0 20"
+                    UseLayoutRounding="True"
+                    RenderOptions.BitmapScalingMode="NearestNeighbor"
+                    SnapsToDevicePixels="True"
+                    RenderOptions.ClearTypeHint="Enabled">
+
+                <Border.Effect>
+                    <DropShadowEffect x:Name="DropShadowEffect"
+                              Color="#e4e5e6" 
+                              BlurRadius="8" 
+                              Direction="-90"
+                              RenderingBias="Performance" 
+                              ShadowDepth="5"/>
+                </Border.Effect>
+                <DockPanel HorizontalAlignment="Stretch">
+                    <StackPanel Orientation="Vertical" 
+                        HorizontalAlignment="Stretch">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Grid.Column="0" Background="Transparent" 
+                               Foreground="#8c8c8c" 
+                               x:Name="TitleTextBlock" 
+                               Text="{Binding Path=ShortTitle, Mode=OneTime}"
+                               Width="auto" 
+                               VerticalAlignment="Top" 
+                               FontSize="17" 
+                               FontFamily="Arial Rounded MT Bold"
+                               Margin="0 0 0 4"
+                               TextWrapping="Wrap" 
+                               FontWeight="Normal" />
+
+                            <Button x:Name="DeleteButton"  
+                            Height="22"
+                            ToolTip="Удалить заметку"
+                            Width="22"
+                            Grid.Row="0" 
+                            Grid.Column="1"
+                            Cursor="Hand"
+                            HorizontalAlignment="Right"
+                            FontSize="12"
+                            VerticalContentAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Background="Transparent"         
+                            Visibility="Visible"
+                            Margin="4 0 0 0"
+                            Foreground="White" 
+                            Content="✖" 
+                            Style="{StaticResource ButtonCustom}" 
+                            CommandParameter="{Binding ID}"
+                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type viewModels:MainWindowViewModel}}}"
+                            FontFamily="Arial" 
+                            FontWeight="Normal" FontStyle="Normal"
+                            VerticalAlignment="Top" 
+                            />
+
+                        </Grid>
+
+                        <TextBlock Background="Transparent" 
+                           Foreground="#909090" 
+                           FontSize="12"
+                           x:Name="ContentTextBlock" 
+                           Text="{Binding Path=ShortContent, Mode=OneTime}" Width="auto"  
+                           HorizontalAlignment="Left" 
+                           FontFamily="Yu Gothic UI Semibold"
+                           TextWrapping="Wrap"/>
+                        <TextBlock Margin="0 5 0 0"
+                           Background="Transparent" 
+                           Foreground="#FFBEBEBF" 
+                           x:Name="CreatedTextBlock" 
+                           FontFamily="Arial Rounded MT Bold"
+                           Text="{Binding Path=ShortCreated, Mode=OneTime}" 
+                           FontSize="11"
+                           VerticalAlignment="Bottom" 
+                           HorizontalAlignment="Right"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
 
     <Window.Triggers>
         <EventTrigger RoutedEvent="Window.Loaded">
@@ -28,7 +204,7 @@
                                 />
 
                     <!-- Анимация заголовка - скатывание вниз -->
-                    <DoubleAnimation From="0" To="162" Duration="00:00:0.8"
+                    <DoubleAnimation From="0" To="116" Duration="00:00:0.8"
                                      BeginTime="0:0:0.6"
                                 Storyboard.TargetName="HeaderBorder"
                                 Storyboard.TargetProperty="Height"
@@ -57,11 +233,13 @@
                                 Storyboard.TargetProperty="Opacity"
                                      BeginTime="00:00:01.3"
                                 From="0.0" To="1.0" Duration="00:00:0.4"/>
-                    <DoubleAnimation Storyboard.TargetName="Tabs_ButtonGroup"
-                                     Name="TabsAnimation"
+
+                    <DoubleAnimation Storyboard.TargetName="ScrollViewer"
+                                     Name="ScrollViewerAnimation"
                                 Storyboard.TargetProperty="Opacity"
-                                     BeginTime="00:00:01.6"
-                                From="0.0" To="1.0" Duration="00:00:0.7"/>
+                                     BeginTime="00:00:01.8"
+                                From="0.0" To="1.0" Duration="00:00:0.4"/>
+                    
 
                     <DoubleAnimation Storyboard.TargetName="CreateButton" 
                                      Name="CreateButtonAnimation"
@@ -155,27 +333,28 @@
                                       Height="32"
                                       Style="{StaticResource SearchBarExtend}" 
                                       KeyUp="SearchTextBox_KeyUp"
-                                      FontFamily="Yu Gothic UI Semibold"/>
-
-                        <hc:ButtonGroup d:Opacity="1" Opacity="0" x:Name="Tabs_ButtonGroup" Margin="0,16,0,0"  Style="{StaticResource ButtonGroupSolid}" Cursor="Hand" FontFamily="Arial Rounded MT Bold">
-                            <RadioButton Command="{Binding GetAllNotesCommand}" ToolTip="Все заметки" BorderThickness="0" Foreground="#b6b6b6" x:Name="AllRadioButton" Background="#eff0f2" Content="Все" IsChecked="True" FontWeight="Bold" Checked="AllRadioButton_Checked"/>
-                            <RadioButton Command="{Binding GetRecentNotesCommand}" ToolTip="Заметки за последние 7 дней" BorderThickness="0" Foreground="#b6b6b6" x:Name="RecentRadioButton" Background="#eff0f2" Content="Недавние" FontWeight="Bold" Checked="RecentRadioButton_Checked"  />
-                            <RadioButton Command="{Binding GetRecentNotesCommand}" ToolTip="Старые заметки" BorderThickness="0" Foreground="#b6b6b6" x:Name="OldRadioButton" Background="#eff0f2" Content="Старые" FontWeight="Bold" Checked="OldRadioButton_Checked"  />
-                        </hc:ButtonGroup>
+                                      FontFamily="Yu Gothic UI Semibold"
+                                      Command="{Binding SearchNotesCommand}"
+                                      CommandParameter="{Binding ElementName=SearchTextBox, Path=Text}"/>
                     </StackPanel>
                 </Border>
 
                 <ScrollViewer Width="auto" 
                               Name="ScrollViewer"
-                              Height="438"
+                              Height="490"
+                              Opacity="0"
                               VerticalScrollBarVisibility="Auto"
                               CanContentScroll="True">
 
-                    <ItemsControl ItemsSource="{Binding Cards}"
+                    <ItemsControl ItemsSource="{Binding Notes}"
+                                  ItemTemplate="{StaticResource NoteTemplate}"
                                   Padding="20 20 20 0"
                                   Name="NotesPanel"
                                   Width="auto" 
-                                  Height="auto"/>
+                                  Height="483"
+                                  >
+
+                    </ItemsControl>
                 </ScrollViewer>
             </StackPanel>
         </DockPanel>

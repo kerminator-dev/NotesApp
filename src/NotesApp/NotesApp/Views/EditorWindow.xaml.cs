@@ -9,7 +9,7 @@ using System.Windows.Input;
 namespace NotesApp.Views
 {
     /// <summary>
-    /// Логика взаимодействия для EditorWindow.xaml
+    /// По-хорошему бы переписать этот класс
     /// </summary>
     public partial class EditorWindow : System.Windows.Window
     {
@@ -32,13 +32,11 @@ namespace NotesApp.Views
             _viewModel = new EditorWindowViewModel();
             this.DataContext = _viewModel;
 
+            // Инициализация таймера для слайдера
             FontSliderTimer = new Timer();
             FontSliderTimer.Interval = 500;
             FontSliderTimer.Elapsed += FontSliderTimer_Elapsed;
             FontSliderTimer.AutoReset = false;
-
-            this.Top = Properties.Settings.Default.EditorWindowTop;
-            this.Left = Properties.Settings.Default.EditorWindowLeft;
         }
 
         /// <summary>
@@ -80,23 +78,31 @@ namespace NotesApp.Views
         /// <param name="e"></param>
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            // Если заметка сохранена ранее и не изменялась
             if (_viewModel.NoteSaved == true)
             {
                 this.Close();
                 return;
             }
 
-            if (TitleTextBox.Text == String.Empty && ContentTextBox.Text == String.Empty)
+            // Если заметка пустая
+            if (_viewModel.Title == String.Empty && _viewModel.Content == String.Empty)
             {
                 this.Close();
                 return;
             }
 
+            // Выход без сохранения
             if (System.Windows.MessageBox.Show("Выйти без сохранения?", "Выход", MessageBoxButton.YesNoCancel) == MessageBoxResult.Yes)
             {
                 this.Close();
                 return;
             }
+        }
+
+        private void FontSlider_Loaded(object sender, RoutedEventArgs e)
+        {
+            FontSliderTimer_Elapsed(sender, default);
         }
 
         private void FontSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -117,9 +123,9 @@ namespace NotesApp.Views
         {
             Dispatcher.Invoke(() =>
             {
-                TitleTextBox.FontSize = FontSlider.Value + 8;
-                DateTextBlock.FontSize = FontSlider.Value;
-                ContentTextBox.FontSize = FontSlider.Value + 4;
+                TitleTextBox.FontSize = FontSlider.Value + 8; // FontSize по умолчанию 18
+                DateTextBlock.FontSize = FontSlider.Value; // FontSize по умолчанию 12
+                ContentTextBox.FontSize = FontSlider.Value + 4; // FontSize по умолчанию 14
             });
         }
 
@@ -140,31 +146,17 @@ namespace NotesApp.Views
             }
         }
 
-        #endregion
-
-        private void FontSlider_Loaded(object sender, RoutedEventArgs e)
-        {
-            FontSliderTimer_Elapsed(sender, default);
-        }
-
+        /// <summary>
+        /// При закрытии окна
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            // Сохранение глобальных настроек
             Properties.Settings.Default.Save();
         }
 
-        private void SaveButton_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (_viewModel.NoteSaved == true)
-                return;
-
-            if (TitleTextBox.Text == String.Empty || ContentTextBox.Text == String.Empty)
-            {
-                System.Windows.MessageBox.Show("Заголовок и основной текст не должны быть пустыми!");
-                return;
-            }
-
-            _viewModel.SaveChanges();
-            Notification.Show(new NotificationControl(new Models.Notification("Заметка успешно сохранена")), ShowAnimation.None);
-        }
+        #endregion
     }
 }

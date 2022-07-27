@@ -129,16 +129,21 @@ namespace NotesApp.Data
 
             var dateTimeRangeStart = DateTime.Now.AddDays(-7);
             var notes = new List<TXTNote>();
+            var filePathCreationDate = new Dictionary<string, DateTime>();
 
+            foreach (var filePath in Directory.EnumerateFiles(_fileDirectory, FILE_SEARCH_PATTERN))
+            {
+                filePathCreationDate.Add(filePath, File.GetCreationTime(filePath));
+            }
 
-            foreach (var filePath in Directory.EnumerateFiles(_fileDirectory, FILE_SEARCH_PATTERN).Where(i => File.GetCreationTime(i) >= dateTimeRangeStart))
+            foreach (var file in filePathCreationDate.Where(i => i.Value >= dateTimeRangeStart))
             {
                 var note = new TXTNote
                 (
-                    id: filePath,
-                    title: Path.GetFileName(filePath).Replace(FILE_FORMAT, ""),
-                    content: File.ReadAllText(filePath),
-                    created: File.GetCreationTime(filePath)
+                    id: file.Key,
+                    title: Path.GetFileName(file.Key).Replace(FILE_FORMAT, ""),
+                    content: File.ReadAllText(file.Key),
+                    created: file.Value
                 );
 
                 notes.Add(note);

@@ -6,7 +6,7 @@ namespace NotesApp.Validators
     {
         public bool Validate(string value)
         {
-            return value.IndexOfAny(Path.GetInvalidPathChars()) == -1; ;
+            return value.IndexOfAny(Path.GetInvalidFileNameChars()) < 0;
         }
     }
 }

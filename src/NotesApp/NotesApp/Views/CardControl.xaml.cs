@@ -11,7 +11,8 @@ namespace NotesApp.Views
     /// </summary>
     public partial class CardControl : UserControl
     {
-        private readonly CardControlViewModel _viewModel;
+        public string ID => _viewModel.ID;
+        private readonly NoteViewModel _viewModel;
 
         public delegate void CardEventHandler(string clickedNoteId, EventArgs e);
 
@@ -21,7 +22,7 @@ namespace NotesApp.Views
         // Соыбтие при нажатии на карточку (для открытия окна редактирования заметки из главной формы)
         public event CardEventHandler? OnCardClick;
 
-        public CardControl(CardControlViewModel cardControlViewModel, TimeSpan animationBeginTime)
+        public CardControl(NoteViewModel cardControlViewModel, TimeSpan animationBeginTime)
         {
             InitializeComponent();
 
@@ -46,14 +47,12 @@ namespace NotesApp.Views
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)
         {
-            if (OnDeleteButtonClick != null)
-                OnDeleteButtonClick.Invoke(_viewModel.ID, e);
+            OnDeleteButtonClick?.Invoke(_viewModel.ID, e);
         }
 
         private void Control_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            if (OnCardClick != null)
-                OnCardClick.Invoke(_viewModel.ID, e);
+            OnCardClick?.Invoke(_viewModel.ID, e);
         }
     }
 }
