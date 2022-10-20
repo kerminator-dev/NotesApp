@@ -4,3 +4,8 @@
 
 ## 
 Поддержка хранения данных в БД SQLite и в .txt
+
+
+❌ Рефакторинг:
+- ❌ Переписать с использованием Dependency Injection
+- ❌ Реализовать Generic Repository Pattern
