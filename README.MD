@@ -8,4 +8,3 @@
 
 ❌ Рефакторинг:
 - ❌ Переписать с использованием Dependency Injection
-- ❌ Реализовать Generic Repository Pattern
