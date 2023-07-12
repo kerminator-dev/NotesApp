@@ -15,7 +15,9 @@
         Name="Window"
         WindowStartupLocation="Manual"
         
-        Topmost="True" Closed="Window_Closed">
+        Topmost="True"
+        
+    >
 
     <Window.Resources>
 
@@ -161,7 +163,7 @@
                             Content="✖" 
                             Style="{StaticResource ButtonCustom}" 
                             CommandParameter="{Binding ID}"
-                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type viewModels:MainWindowViewModel}}}"
+                            Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type viewModels:MainWindowViewModel}},Path=DeleteCommand}"
                             FontFamily="Arial" 
                             FontWeight="Normal" FontStyle="Normal"
                             VerticalAlignment="Top" 
@@ -295,6 +297,7 @@
                                     HorizontalAlignment="Right">
 
                                 <Button x:Name="CloseButton"
+                                        Command="{Binding CloseWindowCommand}"
                                         ToolTip="Выход"
                                         Height="34" 
                                         Opacity="0"
@@ -313,7 +316,7 @@
                                         Content="✖" 
                                         Style="{StaticResource ButtonCustom}" 
                                         FontFamily="Arial Black" 
-                                        FontWeight="Normal" FontStyle="Normal" Click="CloseButton_Click"/>
+                                        FontWeight="Normal" FontStyle="Normal" />
 
                             </StackPanel>
                         </Grid>
@@ -332,7 +335,6 @@
                                       hc:InfoElement.Necessary="True"
                                       Height="32"
                                       Style="{StaticResource SearchBarExtend}" 
-                                      KeyUp="SearchTextBox_KeyUp"
                                       FontFamily="Yu Gothic UI Semibold"
                                       Command="{Binding SearchNotesCommand}"
                                       CommandParameter="{Binding ElementName=SearchTextBox, Path=Text}"/>
@@ -363,6 +365,7 @@
         <Button Opacity="0"
                 ToolTip="Создать заметку"
                 x:Name="CreateButton"
+                Command="{Binding CreateCommand}"
                 Content="Создать" 
                 FontSize="16"
                 Padding="0"
@@ -379,7 +382,7 @@
                 RenderTransformOrigin="0.244,-0.429" 
                 VerticalContentAlignment="Center"
                 FontWeight="Bold"
-                Width="100" Click="CreateButton_Click"
+                Width="100"
                 FontFamily="Arial Rounded MT Bold">
             <Button.Effect>
                 <DropShadowEffect Color="#6072ee" 

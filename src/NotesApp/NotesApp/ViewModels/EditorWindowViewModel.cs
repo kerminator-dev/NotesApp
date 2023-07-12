@@ -2,7 +2,7 @@
 using HandyControl.Data;
 using NotesApp.Commands;
 using NotesApp.Data;
-using NotesApp.Models.Note;
+using NotesApp.Models;
 using NotesApp.Views;
 using System;
 using System.Windows.Input;
@@ -21,7 +21,7 @@ namespace NotesApp.ViewModels
         /// <summary>
         /// Заметка
         /// </summary>
-        private readonly INote _note;
+        private readonly Note _note;
 
         /// <summary>
         /// Сообщение об ошибке
@@ -140,7 +140,7 @@ namespace NotesApp.ViewModels
                 execute: SaveCommand_Execute,
                 canExecute: SaveCommand_CanExecute
             );
-            _note = DataSourceContainer.GetInstance().GetEmptyNote();
+            // _note = DataSourceContainer.GetInstance().GetEmptyNote();
         }
 
         public EditorWindowViewModel(string noteID)
@@ -150,16 +150,16 @@ namespace NotesApp.ViewModels
                 execute: SaveCommand_Execute,
                 canExecute: SaveCommand_CanExecute
             );
-            _note = DataSourceContainer.GetInstance().GetNote(noteID);
+            // _note = DataSourceContainer.GetInstance().GetNote(noteID);
         }
 
         #region Методы для ICommand SaveCommand
 
         private void SaveCommand_Execute(object parameter)
         {
-            DataSourceContainer.GetInstance().SaveNote(this._note);
+            // DataSourceContainer.GetInstance().SaveNote(this._note);
             NoteSaved = true;
-            Notification.Show(new NotificationControl(new Models.Notification("Заметка успешно сохранена")), ShowAnimation.None);
+            HandyControl.Controls.Notification.Show(new NotificationControl(new Models.Notification("Заметка успешно сохранена")), ShowAnimation.None);
             SaveCommand.OnCanExecuteChanged();
         }
 

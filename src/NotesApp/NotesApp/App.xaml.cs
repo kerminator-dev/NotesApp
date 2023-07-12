@@ -1,4 +1,9 @@
-﻿using NotesApp.ViewModels;
+﻿using Microsoft.Extensions.DependencyInjection;
+using NotesApp.Data.Repositories;
+using NotesApp.Mappings;
+using NotesApp.Services.Implementation;
+using NotesApp.Services.Interfaces;
+using NotesApp.ViewModels;
 using NotesApp.Views;
 using System.Windows;
 
@@ -9,21 +14,35 @@ namespace NotesApp
     /// </summary>
     public partial class App : Application
     {
-        protected override void OnStartup(StartupEventArgs e)
-        {
-            MainWindow = CreateMainWindow();
-            MainWindow.Show();
+        private ServiceProvider _serviceProvider;
 
-            base.OnStartup(e);
+
+        public App()
+        {
+            ServiceCollection services = new ServiceCollection();
+            ConfigureServices(services);
+            _serviceProvider = services.BuildServiceProvider();
         }
 
-        private MainWindow CreateMainWindow()
+        protected void ConfigureServices(ServiceCollection services)
         {
-            var viewModel = new MainWindowViewModel();
-            var window = new MainWindow(viewModel);
-            window.DataContext = viewModel;
+            services.AddAutoMapper(typeof(MappingProfile));
+            services.AddSingleton<INoteRepository, SQLiteAdoNoteRepository>();
+            services.AddSingleton<INoteService, DefaultNoteService>();
+            services.AddSingleton<MainWindow>();
+            services.AddSingleton<MainWindowViewModel>();
+        }
 
-            return window;
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            MainWindow = _serviceProvider.GetService<MainWindow>();
+            var viewModel = _serviceProvider.GetService<MainWindowViewModel>();
+            viewModel.LoadNotes();
+            MainWindow.DataContext = viewModel;
+
+            MainWindow?.Show();
+
+            base.OnStartup(e);
         }
     }
 }

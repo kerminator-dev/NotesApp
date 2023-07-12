@@ -1,5 +1,5 @@
-﻿using NotesApp.Extensions;
-using NotesApp.Models.Note;
+﻿using NotesApp.Commands;
+using System.Windows.Input;
 
 namespace NotesApp.ViewModels
 {
@@ -8,31 +8,26 @@ namespace NotesApp.ViewModels
     /// </summary>
     public class NoteViewModel : ViewModelBase
     {
-        private readonly INote _note;
+        // private readonly Note _note;
 
         /// <summary>
         /// ID заметки
         /// </summary>
-        public string ID => _note.ID;
+        public string ID { get; set; }
 
         /// <summary>
         /// Заголовок заметки с ограничением в 50 символов
         /// </summary>
-        public string ShortTitle => _note.Title.Substring(47, "...");
+        public string ShortTitle { get; set; }
 
         /// <summary>
         /// Основной текст размерностью в 90 символов
         /// </summary>
-        public string ShortContent => _note.Content.Substring(87, "...");
+        public string ShortContent { get; set; }
 
         /// <summary>
         /// Краткая запись даты создания
         /// </summary>
-        public string ShortCreated => _note.Created.ToShortDateTimeString();
-
-        public NoteViewModel(INote note)
-        {
-            _note = note;
-        }
+        public string ShortCreated { get; set; }
     }
 }
